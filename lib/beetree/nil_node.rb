@@ -25,7 +25,7 @@ module Beetree
 		end
 
 		def inspect
-			''
+			nil
 		end
 	end
 end
