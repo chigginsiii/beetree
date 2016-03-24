@@ -13,8 +13,7 @@ module Beetree
       end
 
       def inspect
-        format = "|"
-        format += "%10s|" * num_cols
+        format = "%10s" * num_cols
         lines = board.map do |row|
           values = row.map {|cell| cell.nil? ? '.   ' : cell.inspect }
           sprintf(format, *values)

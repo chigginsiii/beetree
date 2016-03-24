@@ -14,56 +14,39 @@ end
 
 =begin
  
-part of the problem is the order of the swapping/placing.
+putting the graph lines into the beetree render:
 
-so this should shift the '2' (parent node) and everything under it left
+  0 1 2 3 4 5
+0 . . . 4 . .
+1 . 2 . . . .
+2 . . 3 . . .
 
-.    .    .    7    .
-.    .    2    .    .
-.    1    .    5    .
+       400
+       / \______
+     32         54
+    /
+  25
 
-NEW ORDER:
-- want to place '5' right of parent '2'
-- there is an acestor above that spot, the 7 which does not move.
-- move everything from parent-left one space left
-- decrement the parent's col
-- insert the '5' one row down, one col right
+- make a new board, with each row representing the graphs from the row above to the row below
+- the first row then is the paths connecting the root to its children:
+  - if there's a left child:
+    - look one row down, first non-empty col on the left: LEFT CHILD
+    - if left child is cell-1, should be able to just put down the slash
+    - if left child is farther than cell-1:
+      - the cells between cell and left child will connect the nodes with a line
 
-but this should push the '1' (ancestor node) in row 3 left:
+  - applying the slash:
+    - start with space as wide as this cell's column
+    - if left node, replace char[0] with '/'
+    - if right node, replace char[-1] with '\'
+    - put it into the row[0] paths at the parent cell column
 
-  .    .    .    .    .    7 
-  .    .    .    2    .    . 
-  .    1    .    .    5    . 
-  .    .    4    .    .    . 
-  .    3    .    .    .    . 
+  - applying the trees:
+    - for each cell between the parent and child:
+      - make an underbar from the width: '_' * column_width[col_i]
+      - put it in this cell for rendering
 
-So the problem is that the value's already been placed. if it went
-like this instead:
-
-- want to place the 3 left of 4
-- ancestor is above...
-- PARENT CANNOT MOVE RIGHT, as we are left of the root!
-- ANCESTOR/CHILDREN must move left one col
-- '3' may now be placed one row below, one col left of '4' (parent)
-
-
-My guess is that this is reflected on the right side. So:
-
-LEFT OF ROOT:
-- left hand inserts 
-  - move the ancestor left
-  - inserts val one left of cur parent col
-- right hand inserts
-  - move the parent left
-  - insert val one right of new parent col
-
-RIGHT OF ROOT: etc, etc
-- left hand inserts 
-  - move the parent right
-  - insert val one left of new parent col
-- right hand inserts
-  - move the ancestor right
-  - inserts val one right of cur parent col
-
+  NOTE: HEY could totally use something like PathCell 
+        to render the '_______' '/    \' '___' stuff.
 
 =end
