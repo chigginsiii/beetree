@@ -94,7 +94,52 @@ RSpec.describe Beetree::Node do
 			root.insert(5)
 		end
 		it 'prints out tree' do
-			puts root.inspect
+			expect(root.inspect).to eq '{7::{3::|{5::|}}|{12::{8::|}|}}'
 		end
 	end
+
+	describe '#nodes_left' do
+		let(:root) { described_class.new 7 }
+		before do
+			root.insert(3)
+			root.insert(12)
+			root.insert(1)
+			root.insert(5)
+		end
+
+		it 'provides number of child nodes to the left' do
+			expect(root.nodes_left).to eq 3
+		end
+	end
+
+	describe '#nodes_right' do
+		let(:root) { described_class.new 7 }
+		before do
+			root.insert(9)
+			root.insert(12)
+			root.insert(11)
+			root.insert(3)
+		end
+
+		it 'provides number of child nodes to the right' do
+			expect(root.nodes_right).to eq 3
+		end
+	end
+
+	describe '#nodes_deep' do
+		let(:root) { described_class.new 17 }
+		before do
+			root.insert(19)
+			root.insert(12)
+			root.insert(11)
+			root.insert(13)
+			root.insert(8)
+			root.insert(4)
+		end
+
+		it 'provides depth of nodes under this node' do
+			expect(root.nodes_deep).to eq 4
+		end
+	end
+
 end
